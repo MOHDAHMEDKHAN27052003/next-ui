@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import { signUp } from '@/lib/auth/signup';
+import { useRouter } from 'next/navigation';
 
 export default function SignUpPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -24,11 +26,12 @@ export default function SignUpPage() {
 
     const result = await signUp(formData);
 
-    if (!result.success) {
+    if (result.success) {
+      router.push('/users/profile');
+    } else {
       setError(result.error || 'An error occurred');
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
