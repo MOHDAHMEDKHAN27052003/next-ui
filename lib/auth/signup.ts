@@ -6,10 +6,10 @@ export interface SignUpData {
     password: string;
 }
 
-export async function signUp(data: SignUpData): Promise<{ success: boolean; error?: string, message?: string }> {
+export async function signUp(data: SignUpData): Promise<{ success: boolean; error?: string }> {
     try {
-        const response = await apiClient.post('/auth/signup', data);
-        return { success: true, message: response.data.message };
+        await apiClient.post('/auth/signup', data);
+        return { success: true };
     } catch (err: any) {
         const message = err.response?.data?.message || err.message || 'An error occurred';
         return { success: false, error: message };
