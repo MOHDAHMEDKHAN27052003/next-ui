@@ -2,24 +2,24 @@
 'use client';
 
 import { fetchUserProfile, UserProfile } from '@/lib/users/profile';
+import { signOutUser } from '@/lib/auth/signout';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [signingOut, setSigningOut] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         const loadProfile = async () => {
             setLoading(true);
-            setError(null);
 
             const result = await fetchUserProfile();
 
             if (result.success && result.data) {
                 setProfile(result.data);
-            } else {
-                setError(result.error || 'Failed to load profile');
             }
 
             setLoading(false);
@@ -27,6 +27,20 @@ export default function ProfilePage() {
 
         loadProfile();
     }, []);
+
+    const handleSignOut = async () => {
+        const confirmed = window.confirm('Confirm sign out');
+        if (!confirmed) return;
+
+        setSigningOut(true);
+        const result = await signOutUser();
+
+        if (result.success) {
+            router.push('/auth/signup');
+        } else {
+            setSigningOut(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -51,9 +65,28 @@ export default function ProfilePage() {
         <div className="container mx-auto px-4 py-8 max-w-3xl">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden">
                 {/* Header */}
-                <div className="bg-linear-to-r from-blue-500 to-blue-600 px-6 py-8">
-                    <h1 className="text-3xl font-bold text-white">User Profile</h1>
-                    <p className="text-blue-100 mt-1">View your account information</p>
+                <div className="bg-linear-to-r from-blue-500 to-blue-600 px-6 py-8 flex items-start justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold text-white">User Profile</h1>
+                        <p className="text-blue-100 mt-1">View your account information</p>
+                    </div>
+
+                    {/* Sign Out Button */}
+                    <button
+                        type="button"
+                        onClick={handleSignOut}
+                        disabled={signingOut}
+                        className="inline-flex items-center gap-2 rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/30 backdrop-blur-sm transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                        {signingOut ? (
+                            <>
+                                <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                                Signing out...
+                            </>
+                        ) : (
+                            <>Sign Out</>
+                        )}
+                    </button>
                 </div>
 
                 {/* Profile Content */}
