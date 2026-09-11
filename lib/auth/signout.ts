@@ -7,7 +7,7 @@ export async function signOutUser(): Promise<{ success: boolean; error?: string 
     } catch (error: any) {
         return {
             success: false,
-            error: error?.response?.data?.message || 'Failed to sign out',
+            error: error?.response?.data?.message || error.message || 'Failed to sign out',
         };
     }
 }

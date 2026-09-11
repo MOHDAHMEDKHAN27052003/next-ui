@@ -10,9 +10,10 @@ apiClient.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
+        const message = error.response?.data?.message || error.message;
 
         if (
-            (error.response?.status === 401) &&
+            (error.response?.status === 401 && message === 'Access token not found') &&
             !originalRequest._retry
         ) {
             originalRequest._retry = true;

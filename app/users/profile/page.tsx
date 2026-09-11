@@ -36,7 +36,7 @@ export default function ProfilePage() {
         const result = await signOutUser();
 
         if (result.success) {
-            router.push('/auth/signup');
+            router.push('/auth/signin');
         } else {
             setSigningOut(false);
         }
