@@ -18,7 +18,7 @@ export default function ProfilePage() {
 
             const result = await fetchUserProfile();
 
-            if (result.success && result.data) {
+            if (result.data) {
                 setProfile(result.data);
             }
 
