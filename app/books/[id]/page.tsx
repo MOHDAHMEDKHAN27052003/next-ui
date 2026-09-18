@@ -1,6 +1,7 @@
+// /app/books/[id]/page.tsx
+import DeleteBookButton from "@/components/deleteBookButton";
 import { getBookById } from "@/lib/books/get";
 
-// /app/books/[id]/page.tsx
 interface PageProps {
   params: Promise<{ id: string }>;
 }
@@ -14,7 +15,7 @@ export default async function BookPage({ params }: PageProps) {
       <div className="p-6">
         <h1 className="text-2xl font-bold text-red-600">Error</h1>
         <p className="mt-2 text-gray-700">
-          {response.message || 'Book not found'}
+          {response.message || "Book not found"}
         </p>
       </div>
     );
@@ -30,7 +31,10 @@ export default async function BookPage({ params }: PageProps) {
         <DetailRow label="ID" value={book._id} />
         <DetailRow label="Author" value={book.author} />
         <DetailRow label="ISBN" value={book.ISBN.toString()} />
-        <DetailRow label="Publication Year" value={book.publicationYear.toString()} />
+        <DetailRow
+          label="Publication Year"
+          value={book.publicationYear.toString()}
+        />
         <DetailRow label="Genre" value={book.genre} />
         <DetailRow label="Quantity" value={book.quantity.toString()} />
         <DetailRow
@@ -42,6 +46,8 @@ export default async function BookPage({ params }: PageProps) {
           value={new Date(book.updatedAt).toLocaleString()}
         />
       </div>
+
+      <DeleteBookButton id={book._id} />
     </div>
   );
 }

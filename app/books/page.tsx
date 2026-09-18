@@ -23,7 +23,7 @@ export default function BooksPage() {
     }
     setLoading(false);
   };
-  
+
   useEffect(() => {
     fetchBooks();
   }, []);
@@ -46,8 +46,14 @@ export default function BooksPage() {
 
   if (books.length === 0) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4">
         <p className="text-gray-500">No books found.</p>
+        <button
+          onClick={() => router.push("/books/create")}
+          className="rounded-lg bg-blue-600 px-6 py-2 text-white font-medium transition hover:bg-blue-700"
+        >
+          Create Book
+        </button>
       </div>
     );
   }
