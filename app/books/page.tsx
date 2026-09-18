@@ -1,12 +1,14 @@
 "use client";
 
-import { Book, getBooks } from "@/lib/books/getBooks";
+import { Book, getBooks } from "@/lib/books/getAll";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const fetchBooks = async () => {
     setLoading(true);
@@ -58,7 +60,8 @@ export default function BooksPage() {
         {books.map((book) => (
           <div
             key={book._id}
-            className="flex flex-col rounded-xl bg-white p-5 shadow-md transition hover:shadow-lg"
+            onClick={() => router.push(`/books/${book._id}`)}
+            className="flex cursor-pointer flex-col rounded-xl bg-white p-5 shadow-md transition hover:shadow-lg"
           >
             <h2 className="mb-2 text-xl font-semibold text-gray-900">
               {book.title}
@@ -91,10 +94,11 @@ export default function BooksPage() {
               </span>
 
               <span
-                className={`rounded-full px-2 py-1 text-xs font-medium ${book.quantity > 0
+                className={`rounded-full px-2 py-1 text-xs font-medium ${
+                  book.quantity > 0
                     ? "bg-green-100 text-green-700"
                     : "bg-red-100 text-red-700"
-                  }`}
+                }`}
               >
                 {book.quantity > 0 ? "Available" : "Out of stock"}
               </span>
